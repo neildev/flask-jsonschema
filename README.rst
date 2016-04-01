@@ -17,10 +17,6 @@ Place schemas in the specified ``JSONSCHEMA_DIR``.
 
     jsonschema = JsonSchema(app)
 
-    @app.errorhandler(ValidationError)
-    def on_validation_error(e):
-        return "error"
-
     @app.route('/books', methods=['POST'])
     def create_book():
         # create the book
@@ -54,6 +50,8 @@ that you can organize related schemas in one file. If you do not wish to use thi
 feature you can simply use one schema per file and remove the second parameter
 to the ``@jsonschema.validate`` call.
 
+With this example configuration, someone who POST's json not conforming to the 
+book schema would recieve a response like the following:
 
 Resources
 ---------

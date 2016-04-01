@@ -28,14 +28,14 @@ class JsonSchemaTests(unittest.TestCase):
                 'author': 'David Foster Wallace'
             })
         )
-        self.assertIn('success', r.data)
+        self.assertIn('success', r.data.decode("utf-8"))
 
     def test_invalid_json(self):
         r = client.post(
             '/books',
             content_type='application/json',
             data=json.dumps({
-                'title': 'Infinite Jest'
             })
         )
-        self.assertIn('error', r.data)
+        self.assertIn('error', r.data.decode("utf-8"))
+        print(r.data.decode("utf-8"))

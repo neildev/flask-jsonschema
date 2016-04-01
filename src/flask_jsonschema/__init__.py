@@ -15,13 +15,10 @@ import jsonschema
 
 class JsonSchemas(object):
     def __init__(self, schemas):
-        self._schemas = schemas
+        self.schemas = schemas
 
     def get_schema(self, path):
-        rv = self._schemas[path[0]]
-        for p in path[1:]:
-            rv = rv[p]
-        return rv
+        return self.schemas[path]
 
 def load_schemas_from_dir(schema_dir):
     schemas = {}
@@ -31,7 +28,7 @@ def load_schemas_from_dir(schema_dir):
         if os.path.isdir(fn) or not fn.endswith('.json'):
             continue
         with open(fn) as f:
-            schemas[key] = json.load(f)
+            schemas["/"+key] = json.load(f)
     return schemas
 
 class JsonSchemaExtension(object):
@@ -50,14 +47,14 @@ class JsonSchemaExtension(object):
             apps.before_request_funcs = {}
         app.before_request_funcs.setdefault(None, [])
         app.before_request_funcs[None].append(self.validate_current_request)
+        app.register_error_handler(jsonschema.ValidationError, self.handle_json_validation_error)
 
     def validate_current_request(self):
-        schema = self.jsonschemas.get_schema(path)
-        try:
-            jsonschema.validate(request.json, schema)
-        except jsonschema.ValidationError as json_validation_error:
-            return self.get_error_response(json_validation_error, request_json)
+        if request.method != "POST":
+            return
+        schema = self.jsonschemas.get_schema(request.path)
+        jsonschema.validate(request.json, schema)
 
-
-    def get_validation_error_response(self, json_validation_error, request_json):
+    def handle_json_validation_error(self, json_validation_error):
         return json.dumps({"error":"request_validation_failed", "error_message":str(json_validation_error)}), 422
+        

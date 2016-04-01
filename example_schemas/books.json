@@ -1,17 +1,19 @@
 {
-  "create": {
-    "type": "object",
-    "properties": {
-      "title": {},
-      "author": {}
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "title": {
+      "id": "http://jsonschema.net/title",
+      "type": "string"
     },
-    "required": ["title", "author"]
-  },
-  "update": {
-    "type": "object",
-    "properties": {
-      "title": {},
-      "author": {}
+    "author": {
+      "id": "http://jsonschema.net/author",
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "title",
+    "author"
+  ]
 }
