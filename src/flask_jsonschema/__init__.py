@@ -9,7 +9,7 @@
 import json
 import os
 
-from flask import current_app, request
+from flask import request
 import jsonschema
 
 
