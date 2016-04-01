@@ -28,7 +28,9 @@ Place schemas in the specified ``JSONSCHEMA_DIR``.
         return 'success'
 
 The schema for the example above should be named ``books.json`` and should
-reside in the configured folder. It should look like so::
+reside in the configured folder. It should look like so:
+
+.. code-block:: json
 
     {
       "create": {
