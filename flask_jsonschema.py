@@ -6,20 +6,14 @@
     flask_jsonschema
 """
 
+import json
 import os
 
-from functools import wraps
-
-try:
-    import simplejson as json
-except ImportError:
-    import json
-
 from flask import current_app, request
-from jsonschema import ValidationError, validate
+import jsonschema
 
 
-class _JsonSchema(object):
+class JsonSchema(object):
     def __init__(self, schemas):
         self._schemas = schemas
 
@@ -40,30 +34,26 @@ def load_schemas_from_dir(schema_dir):
             schemas[key] = json.load(f)
     return schemas
 
-class JsonSchema(object):
-    def __init__(self, app=None):
-        self.app = app
-        if app is not None:
-            self._state = self.init_app(app)
-
-    def init_app(self, app, schemas=None):
+class JsonSchemaExtension(object):
+    def __init__(self, app=None, schemas=None):
         if schemas is None:
             default_dir = os.path.join(app.root_path, 'jsonschema')
             schema_dir = app.config.get('JSONSCHEMA_DIR', default_dir)
             schemas = load_schemas_from_dir(schema_dir)
-        jsonschema = _JsonSchema(schemas)
-        app.extensions['jsonschema'] = jsonschema
-        return jsonschema
+        self.jsonschema = JsonSchema(schemas)
 
-    def validate(self, *path):
-        def wrapper(fn):
-            @wraps(fn)
-            def decorated(*args, **kwargs):
-                schema = current_app.extensions['jsonschema'].get_schema(path)
-                validate(request.json, schema)
-                return fn(*args, **kwargs)
-            return decorated
-        return wrapper
+        if app is not None:
+            self.init_app(app)
 
-    def __getattr__(self, name):
-        return getattr(self._state, name, None)
+    def init_app(self, app, schemas=None):
+        if app.before_request_funcs is None:
+            apps.before_request_funcs = {}
+        app.before_request_funcs.setdefault(None, [])
+        app.before_request_funcs[None].append(self.validate_current_request)
+
+    def validate_current_request(self):
+        schema = self._jsonschema.get_schema(path)
+        try:
+            jsonschema.validate(request.json, schema)
+        except jsonschema.ValidationError:
+            raise
