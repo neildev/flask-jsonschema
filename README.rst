@@ -59,5 +59,5 @@ book schema would recieve a response like the following:
 Resources
 ---------
 
-- `Issue Tracker <http://github.com/mattupstate/flask-jsonschema/issues>`_
-- `Code <http://github.com/mattupstate/flask-jsonschema/>`_
+- `Issue Tracker <http://github.com/hurricanelabs/flask-jsonschema/issues>`_
+- `Code <http://github.com/hurricanelabs/flask-jsonschema/>`_
