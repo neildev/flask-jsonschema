@@ -52,8 +52,6 @@ class JsonSchemaExtension(object):
         app.before_request_funcs[None].append(self.validate_current_request)
 
     def validate_current_request(self):
-        if request.method != "POST":
-            return
         schema = self.jsonschemas.get_schema(path)
         try:
             jsonschema.validate(request.json, schema)
