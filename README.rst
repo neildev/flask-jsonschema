@@ -22,7 +22,6 @@ Place schemas in the specified ``JSONSCHEMA_DIR``.
         return "error"
 
     @app.route('/books', methods=['POST'])
-    @jsonschema.validate('books', 'create')
     def create_book():
         # create the book
         return 'success'
