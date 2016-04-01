@@ -3,7 +3,9 @@ Flask-JsonSchema
 
 JSON request validation for Flask applications.
 
-Place schemas in the specified ``JSONSCHEMA_DIR``. .. code-block:: python
+Place schemas in the specified ``JSONSCHEMA_DIR``. 
+
+.. code-block:: python
 
     import os
 
