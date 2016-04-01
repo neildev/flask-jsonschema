@@ -47,13 +47,14 @@ reside in the configured folder. It should look like so:
       ]
     }
 
-Notice the top level action names. Flask-JsonSchema supports one "path" level so
-that you can organize related schemas in one file. If you do not wish to use this
-feature you can simply use one schema per file and remove the second parameter
-to the ``@jsonschema.validate`` call.
-
 With this example configuration, someone who POST's json not conforming to the 
 book schema would recieve a response like the following:
+
+.. code-block:: json
+
+{"error_message": "'title' is a required property\n\nFailed validating 'required' in schema:\n    {'$schema': 'http://json-schema.org/draft-04/schema#',\n     'id': 'http://jsonschema.net',\n     'properties': {'author': {'id': 'http://jsonschema.net/author',\n                               'type': 'string'},\n                    'title': {'id': 'http://jsonschema.net/title',\n                              'type': 'string'}},\n     'required': ['title', 'author'],\n     'type': 'object'}\n\nOn instance:\n    {}", "error": "request_validation_failed"}
+
+
 
 Resources
 ---------
