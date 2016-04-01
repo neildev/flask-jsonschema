@@ -44,7 +44,7 @@ class JsonSchemaExtension(object):
 
     def init_app(self, app, schemas=None):
         if app.before_request_funcs is None:
-            apps.before_request_funcs = {}
+            app.before_request_funcs = {}
         app.before_request_funcs.setdefault(None, [])
         app.before_request_funcs[None].append(self.validate_current_request)
         app.register_error_handler(jsonschema.ValidationError, self.handle_json_validation_error)
