@@ -50,7 +50,7 @@ class JsonSchemaExtension(object):
         app.register_error_handler(jsonschema.ValidationError, self.handle_json_validation_error)
 
     def validate_current_request(self):
-        if request.method != "POST":
+        if request.method != "POST" and request.method != "PUT":
             return
         schema = self.jsonschemas.get_schema(request.path)
         jsonschema.validate(request.json, schema)
