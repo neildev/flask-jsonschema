@@ -55,7 +55,7 @@ class JsonSchemaExtension(object):
         # schemas should match the class of object not the instance, therefore we take the following
         # path "/WorldObjects/Home" and extract "/WorldObjects" to match the schema
         schema = self.jsonschemas.get_schema('/'.join(request.path.split('/')[:-1:]))
-        jsonschema.validate(request.json, schema)
+        jsonschema.validate(request.get_json(force=True), schema)
 
     def handle_json_validation_error(self, json_validation_error):
         return json.dumps({"error":"request_validation_failed", "error_message":str(json_validation_error)}), 422
