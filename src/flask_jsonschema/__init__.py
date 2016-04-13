@@ -14,8 +14,9 @@ import jsonschema
 
 
 class JsonSchemas(object):
-    def __init__(self, schemas):
+    def __init__(self, schemas, rest_objects):
         self.schemas = schemas
+        self.rest_objects = rest_objects
 
     def get_schema(self, path):
         return self.schemas[path]
@@ -55,6 +56,8 @@ class JsonSchemaExtension(object):
         # schemas should match the class of object not the instance, therefore we take the following
         # path "/WorldObjects/Home" and extract "/WorldObjects" to match the schema
         schema = self.jsonschemas.get_schema('/'.join(request.path.split('/')[:-1:]))
+        if not schema in self.rest_objects:
+            return
         jsonschema.validate(request.json, schema)
 
     def handle_json_validation_error(self, json_validation_error):
