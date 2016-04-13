@@ -14,9 +14,8 @@ import jsonschema
 
 
 class JsonSchemas(object):
-    def __init__(self, schemas, rest_objects):
+    def __init__(self, schemas):
         self.schemas = schemas
-        self.rest_objects = rest_objects
 
     def get_schema(self, path):
         return self.schemas[path]
@@ -33,7 +32,8 @@ def load_schemas_from_dir(schema_dir):
     return schemas
 
 class JsonSchemaExtension(object):
-    def __init__(self, app=None, schemas=None):
+    def __init__(self, app=None, schemas=None, rest_objects=None):
+        self.rest_objects = rest_objects
         if schemas is None:
             default_dir = os.path.join(app.root_path, 'jsonschema')
             schema_dir = app.config.get('JSONSCHEMA_DIR', default_dir)
