@@ -32,8 +32,7 @@ def load_schemas_from_dir(schema_dir):
     return schemas
 
 class JsonSchemaExtension(object):
-    def __init__(self, app=None, schemas=None, rest_objects=None):
-        self.rest_objects = rest_objects
+    def __init__(self, app=None, schemas=None):
         if schemas is None:
             default_dir = os.path.join(app.root_path, 'jsonschema')
             schema_dir = app.config.get('JSONSCHEMA_DIR', default_dir)
@@ -56,7 +55,9 @@ class JsonSchemaExtension(object):
         # schemas should match the class of object not the instance, therefore we take the following
         # path "/WorldObjects/Home" and extract "/WorldObjects" to match the schema
         schema = self.jsonschemas.get_schema('/'.join(request.path.split('/')[:-1:]))
-        if not schema in self.rest_objects:
+        try: 
+            self.schemas[schema]
+        except KeyError:
             return
         jsonschema.validate(request.json, schema)
 
