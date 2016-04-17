@@ -53,11 +53,14 @@ class JsonSchemaExtension(object):
         if request.method != "POST" and request.method != "PUT":
             return
         # schemas should match the class of object not the instance, therefore we take the following
-        # path "/WorldObjects/Home" and extract "/WorldObjects" to match the schema
+        # path "/WorldObject/Home" or "/WorldObjecs" should match the "worldobjects" schema
         try: 
-            schema = self.jsonschemas.get_schema('/'.join(request.path.split('/')[:-1:]))
+            schema = self.jsonschemas.get_schema('/'.join(request.path.lower().split('/')[:-1:]))
         except KeyError:
-            return
+            try:
+                schema = self.jsonschemas.get_schema('/'.join(request.path.lower().split('/')[:-1:])+'s')
+            except KeyError:
+                raise NotImplemented
         jsonschema.validate(request.json, schema)
 
     def handle_json_validation_error(self, json_validation_error):
