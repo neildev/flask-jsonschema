@@ -61,7 +61,7 @@ class JsonSchemaExtension(object):
                 schema = self.jsonschemas.get_schema('/'.join(request.path.lower().split('/')[:-1:])+'s')
             except KeyError:
                 # Fail open if we haven't got a matching schema
-                pass
+                return
         jsonschema.validate(request.json, schema)
 
     def handle_json_validation_error(self, json_validation_error):
