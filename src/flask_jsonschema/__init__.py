@@ -54,6 +54,8 @@ class JsonSchemaExtension(object):
             return
         # schemas should match the class of object not the instance, therefore we take the following
         # path "/WorldObject/Home" or "/WorldObjecs" should match the "worldobjects" schema
+        print '/'.join(request.path.lower().split('/')[:-1:])
+        print '/'.join(request.path.lower().split('/')[:-1:])+'s'
         try: 
             schema = self.jsonschemas.get_schema('/'.join(request.path.lower().split('/')[:-1:]))
         except KeyError:
